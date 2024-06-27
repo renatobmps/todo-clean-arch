@@ -4,12 +4,12 @@ import express, { Request, Response } from "express"
 dotenv.config({ path: ".env.development" })
 
 const app = express()
-const APIPORT = process.env.API_PORT ?? 4000
+const PORT = process.env.API_PORT ?? 4000
 
-app.get("/hello", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("<h1>Hello World!!!</h1>")
 })
 
-app.listen(APIPORT, () => {
-  console.log(`Server running on port ${APIPORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
