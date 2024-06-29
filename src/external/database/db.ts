@@ -23,4 +23,4 @@ async function query(query: string, values?: string[]) {
   }
 }
 
-export default query
+export default { query }
