@@ -8,7 +8,7 @@ async function query(query: string, values?: string[]) {
     port: Number(process.env.POSTGRES_PORT),
     database: process.env.POSTGRES_DB,
     user: process.env.POSTGRES_USER,
-    password: process.env.password,
+    password: process.env.POSTGRES_PASSWORD,
     ssl: process.env.NODE_ENV === "development" ? false : true
   })
 

@@ -12,7 +12,7 @@ export default class UserRepository implements IUserRepository {
 
   async readByEmail(email: string): Promise<IUser | null> {
     const result = await db.query(
-      "SELECT * FRON users WHERE email = $1",
+      "SELECT * FROM users WHERE email = $1",
       [email]
     )
 
@@ -22,5 +22,4 @@ export default class UserRepository implements IUserRepository {
 
     return result?.rows[0]
   }
-
 }

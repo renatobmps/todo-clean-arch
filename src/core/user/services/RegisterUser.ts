@@ -1,7 +1,7 @@
 import IUseCase from "@/core/shared/IUseCase";
 import IUser from "../models/IUser";
 import IUserRepository from "./IUserRepository";
-import errors from "@/core/shared/errors";
+import errors from "../../shared/errors";
 
 export default class RegisterUser implements IUseCase<IUser, void> {
   constructor(
