@@ -3,6 +3,7 @@ import express, { Request, Response } from "express"
 import RegisterUserController from "./external/api/RegisterUserController"
 import RegisterUser from "./core/user/services/RegisterUser"
 import UserRepository from "./external/database/UserRepository"
+import BcryptCryptography from "./external/auth/BcryptCryptography"
 
 dotenv.config({ path: ".env.development" })
 
@@ -22,6 +23,8 @@ app.listen(PORT, () => {
 
 
 const userRepository = new UserRepository()
-const registerUserUseCase = new RegisterUser(userRepository)
+const bcryptCryptography = new BcryptCryptography()
+
+const registerUserUseCase = new RegisterUser(bcryptCryptography, userRepository)
 
 new RegisterUserController(app, registerUserUseCase)

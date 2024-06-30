@@ -2,10 +2,11 @@ import IUseCase from "@/core/shared/IUseCase";
 import IUser from "../models/IUser";
 import IUserRepository from "./IUserRepository";
 import errors from "../../shared/errors";
+import IPasswordCryptography from "./IPasswordCryptography";
 
 export default class RegisterUser implements IUseCase<IUser, void> {
   constructor(
-    // private readonly cryptographyProvider: any,
+    private readonly cryptographyProvider: IPasswordCryptography,
     private readonly usersRepository: IUserRepository
   ) { }
 
@@ -16,13 +17,14 @@ export default class RegisterUser implements IUseCase<IUser, void> {
       throw new Error(errors.USER_EXISTS)
     }
 
+    const passwordEncrypted = this.cryptographyProvider.encrypt(user.password)
 
     const newUser: IUser = {
       name: user.name,
       email: user.email,
-      password: user.password
+      password: passwordEncrypted
     }
 
-    return await this.usersRepository.create(newUser)
+    await this.usersRepository.create(newUser)
   }
 }
