@@ -12,7 +12,7 @@ export default class RegisterUserController {
         await useCase.execute({
           name: req.body.name,
           email: req.body.email,
-          password: req.body.email
+          password: req.body.password
         })
 
         res.status(201).send()
