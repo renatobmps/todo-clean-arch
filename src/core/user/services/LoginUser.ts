@@ -12,7 +12,7 @@ type InputUserData = {
 export default class LoginUser implements IUseCase<InputUserData, IUser> {
   constructor(
     private readonly usersRepository: IUserRepository,
-    private readonly cryptographyProvider: IPasswordCryptography
+    private readonly cryptographyService: IPasswordCryptography
   ) { }
 
   async execute(user: InputUserData): Promise<IUser> {
@@ -22,7 +22,7 @@ export default class LoginUser implements IUseCase<InputUserData, IUser> {
       throw new Error(errors.USER_DONT_EXISTS)
     }
 
-    const passwordMatch = this.cryptographyProvider.compare(user.password, dbUser.password!)
+    const passwordMatch = this.cryptographyService.compare(user.password, dbUser.password!)
 
     if (!passwordMatch) {
       throw new Error(errors.INVALID_PASSWORD)

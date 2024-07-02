@@ -25,10 +25,10 @@ app.listen(PORT, () => {
 
 
 const userRepository = new UserRepository()
-const bcryptCryptography = new BcryptCryptography()
+const cryptographyService = new BcryptCryptography()
 
-const registerUserUseCase = new RegisterUser(userRepository, bcryptCryptography)
-const loginUserUseCase = new LoginUser(userRepository, bcryptCryptography)
+const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
+const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
