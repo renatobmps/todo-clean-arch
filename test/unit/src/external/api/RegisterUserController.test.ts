@@ -28,7 +28,7 @@ describe("Test RegisterUserController.ts", () => {
       readByEmail: jest.fn()
     }
 
-    registerUser = new RegisterUser(mockCryptographyProvider, mockUserRepository)
+    registerUser = new RegisterUser(mockUserRepository, mockCryptographyProvider)
 
     jest.spyOn(registerUser, "execute")
 
