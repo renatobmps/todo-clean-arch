@@ -4,7 +4,7 @@ import IUserRepository from "./IUserRepository";
 import IPasswordCryptography from "./IPasswordCryptography";
 import errors from "../../shared/errors";
 
-type InputUserData = {
+export interface InputUserData {
   email: string,
   password: string
 }
