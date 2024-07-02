@@ -4,6 +4,8 @@ import RegisterUserController from "./external/api/RegisterUserController"
 import RegisterUser from "./core/user/services/RegisterUser"
 import UserRepository from "./external/database/UserRepository"
 import BcryptCryptography from "./external/auth/BcryptCryptography"
+import LoginUser from "./core/user/services/LoginUser"
+import LoginUserController from "./external/api/LoginUserController"
 
 dotenv.config({ path: ".env.development" })
 
@@ -26,5 +28,7 @@ const userRepository = new UserRepository()
 const bcryptCryptography = new BcryptCryptography()
 
 const registerUserUseCase = new RegisterUser(userRepository, bcryptCryptography)
+const loginUserUseCase = new LoginUser(userRepository, bcryptCryptography)
 
 new RegisterUserController(app, registerUserUseCase)
+new LoginUserController(app, loginUserUseCase)

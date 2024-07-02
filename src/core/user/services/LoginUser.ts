@@ -2,7 +2,7 @@ import IUseCase from "@/core/shared/IUseCase";
 import IUser from "../models/IUser";
 import IUserRepository from "./IUserRepository";
 import IPasswordCryptography from "./IPasswordCryptography";
-import errors from "@/core/shared/errors";
+import errors from "../../shared/errors";
 
 type InputUserData = {
   email: string,
