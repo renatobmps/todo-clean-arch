@@ -6,8 +6,8 @@ import IPasswordCryptography from "./IPasswordCryptography";
 
 export default class RegisterUser implements IUseCase<IUser, void> {
   constructor(
-    private readonly cryptographyProvider: IPasswordCryptography,
-    private readonly usersRepository: IUserRepository
+    private readonly usersRepository: IUserRepository,
+    private readonly cryptographyProvider: IPasswordCryptography
   ) { }
 
   async execute(user: IUser): Promise<void> {
@@ -17,7 +17,7 @@ export default class RegisterUser implements IUseCase<IUser, void> {
       throw new Error(errors.USER_EXISTS)
     }
 
-    const passwordEncrypted = this.cryptographyProvider.encrypt(user.password)
+    const passwordEncrypted = this.cryptographyProvider.encrypt(user.password!)
 
     const newUser: IUser = {
       name: user.name,

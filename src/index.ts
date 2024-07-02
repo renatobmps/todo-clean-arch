@@ -25,6 +25,6 @@ app.listen(PORT, () => {
 const userRepository = new UserRepository()
 const bcryptCryptography = new BcryptCryptography()
 
-const registerUserUseCase = new RegisterUser(bcryptCryptography, userRepository)
+const registerUserUseCase = new RegisterUser(userRepository, bcryptCryptography)
 
 new RegisterUserController(app, registerUserUseCase)
