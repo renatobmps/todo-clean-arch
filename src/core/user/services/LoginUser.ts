@@ -25,8 +25,10 @@ export default class LoginUser implements IUseCase<InputUserData, IUser> {
     const passwordMatch = this.cryptographyService.compare(user.password, dbUser.password!)
 
     if (!passwordMatch) {
-      throw new Error(errors.INVALID_PASSWORD)
+      throw new Error(errors.INVALID_CREDENTIALS)
     }
+
+    //Todo: Verificar a prop "password" está sendo retornada com algum valor no console.
 
     return { ...dbUser, password: undefined }
   }

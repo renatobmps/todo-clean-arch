@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express"
 import LoginUser from "@/core/user/services/LoginUser";
+import errors from "../../core/shared/errors";
 
 export default class LoginUserController {
   constructor(
@@ -17,7 +18,15 @@ export default class LoginUserController {
         res.status(200).send(user)
 
       } catch (error: any) {
-        res.status(400).send(error.message)
+        if (error.message === errors.INVALID_CREDENTIALS) {
+          res.status(400).send(errors.INVALID_CREDENTIALS);
+
+        } else if (error.message === errors.USER_DONT_EXISTS) {
+          res.status(400).send(errors.USER_DONT_EXISTS);
+
+        } else {
+          res.status(500).send("Internal server error");
+        }
       }
     })
   }

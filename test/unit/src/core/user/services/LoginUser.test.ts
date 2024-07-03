@@ -50,7 +50,7 @@ describe("Test LoginUser.ts use case", () => {
     mockUserRepository.readByEmail.mockResolvedValue(dbUser)
     mockCryptographyService.compare.mockReturnValue(false)
 
-    await expect(loginUser.execute(userDataProvided)).rejects.toThrow(errors.INVALID_PASSWORD)
+    await expect(loginUser.execute(userDataProvided)).rejects.toThrow(errors.INVALID_CREDENTIALS)
   })
 
   it("Should return the user without password when the login is successful", async () => {
