@@ -31,9 +31,13 @@ describe("Test LoginUserController.ts", () => {
     loginUser = new LoginUser(mockUserRepository, mockCryptographyService)
 
     new LoginUserController(app, loginUser)
+
+    jest.spyOn(loginUser, "execute")
   })
 
   it("Should log in an existing user", async () => {
+    (loginUser.execute as jest.Mock).mockResolvedValue({ id: "1", name: "John Doe", email: "john@email.com", password: undefined })
+
     const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "encryptedPassword" }
 
     mockUserRepository.readByEmail.mockResolvedValue(user)
@@ -45,6 +49,10 @@ describe("Test LoginUserController.ts", () => {
 
     expect(response.status).toBe(200)
     expect(response.body).toEqual({ id: "1", name: "John Doe", email: "john@email.com", password: undefined })
+    expect(loginUser.execute).toHaveBeenCalledWith({
+      email: "john@email.com",
+      password: "password123"
+    })
   })
 
   it("Should return 400 when the credentials are incorrect", async () => {
