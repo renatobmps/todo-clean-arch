@@ -16,6 +16,7 @@ export default class RegisterUserController {
         })
 
         res.status(201).send()
+
       } catch (error: any) {
         res.status(400).send(error.message)
       }

@@ -6,11 +6,11 @@ import RegisterUser from "@/core/user/services/RegisterUser"
 
 describe("Test RegisterUser.ts use case", () => {
   let registerUser: RegisterUser;
-  let mockCryptographyProvider: jest.Mocked<IPasswordCryptography>;
+  let mockCrypgraphyService: jest.Mocked<IPasswordCryptography>;
   let mockUserRepository: jest.Mocked<IUserRepository>
 
   beforeEach(() => {
-    mockCryptographyProvider = {
+    mockCrypgraphyService = {
       encrypt: jest.fn(),
       compare: jest.fn()
     }
@@ -20,19 +20,19 @@ describe("Test RegisterUser.ts use case", () => {
       readByEmail: jest.fn()
     }
 
-    registerUser = new RegisterUser(mockCryptographyProvider, mockUserRepository)
+    registerUser = new RegisterUser(mockUserRepository, mockCrypgraphyService)
   })
 
   it("Should successfully register a new user", async () => {
     const newUser: IUser = { name: "John Doe", email: "john@email.com", password: "password123" }
 
     mockUserRepository.readByEmail.mockResolvedValue(null)
-    mockCryptographyProvider.encrypt.mockReturnValue("encryptedPassword")
+    mockCrypgraphyService.encrypt.mockReturnValue("encryptedPassword")
 
     await registerUser.execute(newUser)
 
     expect(mockUserRepository.readByEmail).toHaveBeenCalledWith(newUser.email)
-    expect(mockCryptographyProvider.encrypt).toHaveBeenCalledWith(newUser.password)
+    expect(mockCrypgraphyService.encrypt).toHaveBeenCalledWith(newUser.password)
     expect(mockUserRepository.create).toHaveBeenCalledWith({
       name: newUser.name,
       email: newUser.email,
@@ -46,7 +46,7 @@ describe("Test RegisterUser.ts use case", () => {
     mockUserRepository.readByEmail.mockResolvedValue(user)
 
     await expect(registerUser.execute(user)).rejects.toThrow(errors.USER_EXISTS)
-    expect(mockCryptographyProvider.encrypt).not.toHaveBeenCalled()
+    expect(mockCrypgraphyService.encrypt).not.toHaveBeenCalled()
     expect(mockUserRepository.create).not.toHaveBeenCalled()
   })
 })

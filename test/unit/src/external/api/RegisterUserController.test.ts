@@ -79,3 +79,46 @@ describe("Test RegisterUserController.ts", () => {
     })
   })
 })
+
+
+// describe("Test RegisterUserController.ts", () => {
+//   let app: Express
+//   let registerUser: RegisterUser
+//   let mockUserRepository: jest.Mocked<IUserRepository>
+//   let mockCryptographyService: jest.Mocked<IPasswordCryptography>
+
+//   beforeEach(() => {
+//     app = express()
+//     app.use(express.json())
+//     app.use(express.urlencoded({ extended: true }))
+
+//     mockUserRepository = {
+//       create: jest.fn(),
+//       readByEmail: jest.fn()
+//     }
+
+//     mockCryptographyService = {
+//       encrypt: jest.fn(),
+//       compare: jest.fn()
+//     }
+
+//     registerUser = new RegisterUser(mockUserRepository, mockCryptographyService)
+
+//     new RegisterUserController(app, registerUser)
+//   })
+
+//   it("Shold return 201 when user is registred successfully", async () => {
+//     const newUser: IUser = { name: "John Doe", email: "john@email.com", password: "password123" }
+
+//     mockUserRepository.readByEmail.mockResolvedValue(null)
+//     mockCryptographyService.encrypt.mockReturnValue("ecryptedPassword")
+
+//     const response = await request(app)
+//       .post("/api/users/register")
+//       .send(newUser)
+
+//     expect(response.status).toBe(201)
+//     expect(response.body).toEqual()
+//   })
+// })
+
