@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-export default class jwtService {
+export default class JwtService {
   constructor(
     private readonly secret: string
   ) { }

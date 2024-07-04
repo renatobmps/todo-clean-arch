@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express"
 import LoginUser from "@/core/user/services/LoginUser";
-import errors from "../../core/shared/errors";
+import errors from "../../../core/shared/errors";
 
 export default class LoginUserController {
   constructor(

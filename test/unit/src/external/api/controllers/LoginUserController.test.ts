@@ -3,7 +3,7 @@ import IUser from "@/core/user/models/IUser"
 import IPasswordCryptography from "@/core/user/services/IPasswordCryptography"
 import IUserRepository from "@/core/user/services/IUserRepository"
 import LoginUser, { InputUserData } from "@/core/user/services/LoginUser"
-import LoginUserController from "@/external/api/LoginUserController"
+import LoginUserController from "@/external/api/controllers/LoginUserController"
 import express, { Express } from "express"
 import request from "supertest"
 
