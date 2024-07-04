@@ -6,7 +6,7 @@ export default class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<void> {
     await db.query(
       "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",
-      [user.name, user.email, user.password]
+      [user.name, user.email, user.password!]
     )
   }
 
