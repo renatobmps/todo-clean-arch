@@ -1,5 +1,6 @@
-import { Express, Request, Response } from "express"
 import CreateTodo from "@/core/todo/services/CreateTodo";
+import { Express, Response } from "express"
+import { ReqWithUser } from "../middlewares/authMiddleware";
 
 export default class CreateTodoController {
   constructor(
@@ -8,10 +9,11 @@ export default class CreateTodoController {
     ...middlewares: any[]
   ) {
 
-    webServer.post("/api/todos/create", ...middlewares, async (req: Request, res: Response) => {
+    webServer.post("/api/todos/create", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
         await useCase.execute({
-          title: req.body.tittle,
+          userId: req.user!.id,
+          title: req.body.title,
           description: req.body.description
         })
 

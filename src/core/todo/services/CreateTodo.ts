@@ -1,6 +1,6 @@
 import IUseCase from "@/core/shared/IUseCase";
 import ITodo from "../models/ITodo";
-import errors from "@/core/shared/errors";
+import errors from "../../shared/errors";
 import ITodoRepository from "./ITodoRepository";
 
 export default class CreateTodo implements IUseCase<ITodo, void> {
@@ -20,6 +20,7 @@ export default class CreateTodo implements IUseCase<ITodo, void> {
     const newTodo: ITodo = {
       title: data.title,
       description: data.description,
+      userId: data.userId
     }
 
     return this.todoRepository.create(newTodo)

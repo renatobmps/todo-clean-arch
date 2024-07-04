@@ -6,6 +6,10 @@ import UserRepository from "./external/database/UserRepository"
 import BcryptCryptography from "./external/auth/BcryptCryptography"
 import LoginUser from "./core/user/services/LoginUser"
 import LoginUserController from "./external/api/controllers/LoginUserController"
+import TodoRepository from "./external/database/TodoRepository"
+import CreateTodo from "./core/todo/services/CreateTodo"
+import CreateTodoController from "./external/api/controllers/CreateTodoController"
+import authMiddleware from "./external/api/middlewares/authMiddleware"
 
 dotenv.config({ path: ".env.development" })
 
@@ -26,9 +30,14 @@ app.listen(PORT, () => {
 
 const userRepository = new UserRepository()
 const cryptographyService = new BcryptCryptography()
+const todoRepository = new TodoRepository()
+
+const authMidd = authMiddleware(userRepository)
 
 const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
 const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
+const createTodoUseCase = new CreateTodo(todoRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
+new CreateTodoController(app, createTodoUseCase, authMidd)
