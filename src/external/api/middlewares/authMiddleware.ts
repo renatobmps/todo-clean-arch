@@ -1,10 +1,10 @@
-import errors from "@/core/shared/errors";
+import errors from "../../../core/shared/errors";
 import IUser from "@/core/user/models/IUser";
 import IUserRepository from "@/core/user/services/IUserRepository";
-import JwtService from "@/external/auth/JwtService";
+import JwtService from "../../auth/JwtService";
 import { NextFunction, Request, Response } from "express";
 
-interface ReqWithUser extends Request {
+export interface ReqWithUser extends Request {
   user?: IUser
 }
 
