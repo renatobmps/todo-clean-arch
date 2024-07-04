@@ -1,7 +1,7 @@
 import request from "supertest"
 import express, { Express } from "express"
 import RegisterUser from "@/core/user/services/RegisterUser"
-import RegisterUserController from "@/external/api/RegisterUserController"
+import RegisterUserController from "@/external/api/controllers/RegisterUserController"
 import IPasswordCryptography from "@/core/user/services/IPasswordCryptography"
 import IUserRepository from "@/core/user/services/IUserRepository"
 import IUser from "@/core/user/models/IUser"

@@ -1,11 +1,11 @@
 import dotenv from "dotenv"
 import express, { Request, Response } from "express"
-import RegisterUserController from "./external/api/RegisterUserController"
+import RegisterUserController from "./external/api/controllers/RegisterUserController"
 import RegisterUser from "./core/user/services/RegisterUser"
 import UserRepository from "./external/database/UserRepository"
 import BcryptCryptography from "./external/auth/BcryptCryptography"
 import LoginUser from "./core/user/services/LoginUser"
-import LoginUserController from "./external/api/LoginUserController"
+import LoginUserController from "./external/api/controllers/LoginUserController"
 
 dotenv.config({ path: ".env.development" })
 

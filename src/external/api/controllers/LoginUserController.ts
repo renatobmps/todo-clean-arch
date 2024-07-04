@@ -1,6 +1,8 @@
 import { Express, Request, Response } from "express"
 import LoginUser from "@/core/user/services/LoginUser";
-import errors from "../../core/shared/errors";
+import errors from "../../../core/shared/errors";
+import JwtService from "../../auth/JwtService";
+import IUser from "@/core/user/models/IUser";
 
 export default class LoginUserController {
   constructor(
@@ -10,12 +12,17 @@ export default class LoginUserController {
 
     webServer.post("/api/users/login", async (req: Request, res: Response) => {
       try {
-        const user = await useCase.execute({
+        const user: IUser = await useCase.execute({
           email: req.body.email,
           password: req.body.password
         })
 
-        res.status(200).send(user)
+        const jwtService = new JwtService(process.env.JWT_SECRET!)
+
+        res.status(200).send({
+          user: user,
+          token: jwtService.sign(user)
+        })
 
       } catch (error: any) {
         if (error.message === errors.INVALID_CREDENTIALS) {
