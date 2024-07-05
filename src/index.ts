@@ -10,6 +10,8 @@ import TodoRepository from "./external/database/TodoRepository"
 import CreateTodo from "./core/todo/services/CreateTodo"
 import CreateTodoController from "./external/api/controllers/CreateTodoController"
 import authMiddleware from "./external/api/middlewares/authMiddleware"
+import ReadTodosByUserId from "./core/todo/services/ReadTodosByUserId"
+import ReadTodosByUserIdController from "./external/api/controllers/ReadTodosByUserIdController"
 
 dotenv.config({ path: ".env.development" })
 
@@ -37,7 +39,9 @@ const authMidd = authMiddleware(userRepository)
 const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
 const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
 const createTodoUseCase = new CreateTodo(todoRepository)
+const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
 new CreateTodoController(app, createTodoUseCase, authMidd)
+new ReadTodosByUserIdController(app, readTodosByUserIdUseCase, authMidd)

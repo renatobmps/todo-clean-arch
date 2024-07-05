@@ -1,0 +1,21 @@
+import { Express, Request, Response } from "express"
+import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId";
+
+export default class ReadTodosByUserIdController {
+  constructor(
+    private readonly webServer: Express,
+    private readonly useCase: ReadTodosByUserId,
+    ...middlewares: any[]
+  ) {
+
+    webServer.get("/api/todos/:userId", ...middlewares, async (req: Request, res: Response) => {
+      try {
+        const todoList = await useCase.execute(req.params.userId)
+
+        res.status(200).send(todoList)
+      } catch (error: any) {
+        res.status(400).send(error.message)
+      }
+    })
+  }
+}

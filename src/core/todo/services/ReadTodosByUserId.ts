@@ -2,7 +2,6 @@ import IUseCase from "@/core/shared/IUseCase";
 import ITodo from "../models/ITodo";
 import ITodoRepository from "./ITodoRepository";
 
-
 export default class ReadTodosByUserId implements IUseCase<string, ITodo[]> {
   constructor(
     private readonly todoRepository: ITodoRepository
