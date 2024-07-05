@@ -10,7 +10,14 @@ export default class TodoRepository implements ITodoRepository {
     )
   }
 
-  readAll(): Promise<ITodo[]> {
-    throw new Error("Method not implemented.");
+  async readAllByUserId(userId: string): Promise<ITodo[]> {
+    const response = await db.query(
+      "SELECT * FROM todos WHERE user_id = $1",
+      [userId]
+    )
+
+    if (!response || !response.rows) return []
+
+    return response.rows as ITodo[]
   }
 }
