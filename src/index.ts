@@ -29,7 +29,7 @@ const userRepository = new UserRepository()
 const cryptographyService = new BcryptCryptography()
 const todoRepository = new TodoRepository()
 
-const authMidd = authMiddleware(userRepository)
+const auth = authMiddleware(userRepository)
 
 const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
 const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
@@ -38,5 +38,5 @@ const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
-new CreateTodoController(app, createTodoUseCase, authMidd)
-new ReadTodosByUserIdController(app, readTodosByUserIdUseCase, authMidd)
+new CreateTodoController(app, createTodoUseCase, auth)
+new ReadTodosByUserIdController(app, readTodosByUserIdUseCase, auth)
