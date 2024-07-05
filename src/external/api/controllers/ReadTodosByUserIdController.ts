@@ -3,8 +3,8 @@ import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId";
 
 export default class ReadTodosByUserIdController {
   constructor(
-    private readonly webServer: Express,
-    private readonly useCase: ReadTodosByUserId,
+    webServer: Express,
+    useCase: ReadTodosByUserId,
     ...middlewares: any[]
   ) {
 
