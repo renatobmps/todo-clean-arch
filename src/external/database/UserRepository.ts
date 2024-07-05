@@ -20,6 +20,6 @@ export default class UserRepository implements IUserRepository {
       return null
     }
 
-    return result?.rows[0]
+    return result?.rows[0] as IUser
   }
 }
