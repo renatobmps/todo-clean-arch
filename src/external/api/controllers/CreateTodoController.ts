@@ -1,5 +1,5 @@
 import CreateTodo from "@/core/todo/services/CreateTodo";
-import { Express, RequestHandler, Response } from "express"
+import { RequestHandler, Response, Express } from "express"
 import { ReqWithUser } from "../middlewares/authMiddleware";
 
 export default class CreateTodoController {

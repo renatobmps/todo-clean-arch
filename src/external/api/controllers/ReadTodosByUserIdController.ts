@@ -1,11 +1,11 @@
-import { Express, Request, Response } from "express"
 import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId";
+import { Express, Request, RequestHandler, Response } from "express"
 
 export default class ReadTodosByUserIdController {
   constructor(
     webServer: Express,
     useCase: ReadTodosByUserId,
-    ...middlewares: any[]
+    ...middlewares: RequestHandler[]
   ) {
 
     webServer.get("/api/todos/:userId", ...middlewares, async (req: Request, res: Response) => {
