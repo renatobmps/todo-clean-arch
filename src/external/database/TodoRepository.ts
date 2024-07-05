@@ -10,7 +10,7 @@ export default class TodoRepository implements ITodoRepository {
     )
   }
 
-  async readAllByUserId(userId: string): Promise<ITodo[]> {
+  async readTodosByUserId(userId: string): Promise<ITodo[]> {
     const response = await db.query(
       "SELECT * FROM todos WHERE user_id = $1",
       [userId]

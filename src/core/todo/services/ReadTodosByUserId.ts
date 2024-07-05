@@ -3,14 +3,14 @@ import ITodo from "../models/ITodo";
 import ITodoRepository from "./ITodoRepository";
 
 
-export default class ReadAllByUserId implements IUseCase<string, ITodo[]> {
+export default class ReadTodosByUserId implements IUseCase<string, ITodo[]> {
   constructor(
     private readonly todoRepository: ITodoRepository
   ) { }
 
   async execute(userId: string): Promise<ITodo[]> {
     try {
-      return await this.todoRepository.readAllByUserId(userId)
+      return await this.todoRepository.readTodosByUserId(userId)
     } catch (error) {
       console.error('Error executing ReadAllByUserIdUseCase', error)
       throw error
