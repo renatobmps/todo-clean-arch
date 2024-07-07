@@ -1,5 +1,6 @@
 import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId";
-import { Express, Request, RequestHandler, Response } from "express"
+import { Express, RequestHandler, Response } from "express"
+import { ReqWithUser } from "../middlewares/authMiddleware";
 
 export default class ReadTodosByUserIdController {
   constructor(
@@ -8,9 +9,14 @@ export default class ReadTodosByUserIdController {
     ...middlewares: RequestHandler[]
   ) {
 
-    webServer.get("/api/todos/:userId", ...middlewares, async (req: Request, res: Response) => {
+    webServer.get("/api/todos", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
-        const todoList = await useCase.execute(req.params.userId)
+        if (!req.user) {
+          res.status(403).send('Access Denied');
+          return;
+        }
+
+        const todoList = await useCase.execute(req.user.id!)
 
         res.status(200).send(todoList)
       } catch (error: any) {

@@ -10,11 +10,11 @@ export interface ReqWithUser extends Request {
 
 export default function authMiddleware(userRepository: IUserRepository) {
   return async (req: ReqWithUser, res: Response, next: NextFunction) => {
-    const accesDenied = () => res.status(403).send(errors.ACCESS_DENIED)
+    const accessDenied = () => res.status(403).send(errors.ACCESS_DENIED)
 
     const token = req.headers.authorization?.replace("bearer", "")
     if (!token) {
-      accesDenied()
+      accessDenied()
       return
     }
 
@@ -23,7 +23,7 @@ export default function authMiddleware(userRepository: IUserRepository) {
 
     const dbUser = await userRepository.readByEmail(jwtPayloadData.email)
     if (!dbUser) {
-      accesDenied()
+      accessDenied()
       return
     }
 
