@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.info(`Server running on port ${PORT}`)
 })
 
 const userRepository = new UserRepository()
@@ -34,7 +34,7 @@ const auth = authMiddleware(userRepository)
 const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
 const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
 const createTodoUseCase = new CreateTodo(todoRepository)
-const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository, userRepository)
+const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
