@@ -34,7 +34,7 @@ const auth = authMiddleware(userRepository)
 const registerUserUseCase = new RegisterUser(userRepository, cryptographyService)
 const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
 const createTodoUseCase = new CreateTodo(todoRepository)
-const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository)
+const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository, userRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
