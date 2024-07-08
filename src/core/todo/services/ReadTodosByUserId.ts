@@ -8,6 +8,12 @@ export default class ReadTodosByUserId implements IUseCase<string, ITodo[]> {
   ) { }
 
   async execute(userId: string): Promise<ITodo[]> {
-    return await this.todoRepository.readTodosByUserId(userId)
+    try {
+      return await this.todoRepository.readTodosByUserId(userId)
+
+    } catch (error: any) {
+      console.error(`Error during reading to-dos for user ${userId}: `, error)
+      throw new Error(error.message)
+    }
   }
 }
