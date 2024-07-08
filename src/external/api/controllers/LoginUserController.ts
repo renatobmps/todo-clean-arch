@@ -25,14 +25,13 @@ export default class LoginUserController {
         })
 
       } catch (error: any) {
-        if (error.message === errors.INVALID_CREDENTIALS) {
-          res.status(400).send(errors.INVALID_CREDENTIALS);
-
-        } else if (error.message === errors.USER_DONT_EXISTS) {
-          res.status(400).send(errors.USER_DONT_EXISTS);
-
+        if (
+          error.message === errors.USER_DONT_EXISTS ||
+          error.message === errors.INVALID_CREDENTIALS
+        ) {
+          res.status(400).send(error.message)
         } else {
-          res.status(500).send("Internal server error");
+          res.status(500).send(errors.UNEXPECTED_ERROR)
         }
       }
     })

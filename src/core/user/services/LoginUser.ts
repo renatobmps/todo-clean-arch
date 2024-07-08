@@ -16,18 +16,22 @@ export default class LoginUser implements IUseCase<InputUserData, IUser> {
   ) { }
 
   async execute(user: InputUserData): Promise<IUser> {
-    const dbUser = await this.usersRepository.readByEmail(user.email)
+    try {
+      const dbUser = await this.usersRepository.readByEmail(user.email)
+      if (!dbUser) {
+        throw new Error(errors.USER_DONT_EXISTS)
+      }
 
-    if (!dbUser) {
-      throw new Error(errors.USER_DONT_EXISTS)
+      const passwordMatch = await this.cryptographyService.compare(user.password, dbUser.password!)
+      if (!passwordMatch) {
+        throw new Error(errors.INVALID_CREDENTIALS)
+      }
+
+      return { ...dbUser, password: undefined }
+
+    } catch (error: any) {
+      console.error("Error durin user login: ", error)
+      throw new Error(error.message)
     }
-
-    const passwordMatch = this.cryptographyService.compare(user.password, dbUser.password!)
-
-    if (!passwordMatch) {
-      throw new Error(errors.INVALID_CREDENTIALS)
-    }
-
-    return { ...dbUser, password: undefined }
   }
 }
