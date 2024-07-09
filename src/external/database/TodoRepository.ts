@@ -52,4 +52,11 @@ export default class TodoRepository implements ITodoRepository {
 
     await db.query(queryString, valuesToUpdate)
   }
+
+  async delete(id: string): Promise<void> {
+    await db.query(
+      "DELETE * FROM todos WHERE id = $1",
+      [id]
+    )
+  }
 }
