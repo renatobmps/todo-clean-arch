@@ -9,7 +9,7 @@ export default class UpdateTodo implements IUseCase<ITodo, void> {
 
   async execute(todo: ITodo): Promise<void> {
     try {
-      await this.todoRepository.edit(todo)
+      await this.todoRepository.update(todo)
 
     } catch (error: any) {
       console.error(`Error during update to-do id: ${todo.id} from user id: ${todo.userId}: `, error)

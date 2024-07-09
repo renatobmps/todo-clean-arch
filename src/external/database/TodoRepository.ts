@@ -21,24 +21,35 @@ export default class TodoRepository implements ITodoRepository {
     return response.rows as ITodo[]
   }
 
-  async edit(todo: Partial<ITodo>): Promise<void> {
-    if (todo.title !== undefined && todo.description === undefined && todo.completed === undefined) {
-      await db.query(
-        "UPDATE todos SET title = $1 WHERE id = $2 AND user_id = $3",
-        [todo.title, todo.id!, todo.userId!]
-      )
 
-    } else if (todo.description !== undefined && todo.title === undefined && todo.completed === undefined) {
-      await db.query(
-        "UPDATE todos SET description = $1 WHERE id = $2 AND user_id = $3",
-        [todo.description, todo.id!, todo.userId!]
-      )
+  async update(todo: ITodo): Promise<void> {
+    const valuesToUpdate = []
 
-    } else if (todo.completed !== undefined && todo.title === undefined && todo.description === undefined) {
-      await db.query(
-        "UPDATE todos SET completed = $1 WHERE id = $2 AND user_id = $3",
-        [todo.completed, todo.id!, todo.userId!]
-      )
+    let queryString = "UPDATE todos SET "
+
+    if (todo.title !== undefined) {
+      valuesToUpdate.push(todo.title)
+      queryString += `title = $${valuesToUpdate.length}, `
     }
+
+    if (todo.description !== undefined) {
+      valuesToUpdate.push(todo.description)
+      queryString += `description = $${valuesToUpdate.length}, `
+    }
+
+    if (todo.completed !== undefined) {
+      valuesToUpdate.push(todo.completed)
+      queryString += `completed = $${valuesToUpdate.length}, `
+    }
+
+    queryString = queryString.slice(0, -2)
+
+    valuesToUpdate.push(todo.id!)
+    queryString += ` WHERE id = $${valuesToUpdate.length}`
+
+    valuesToUpdate.push(todo.userId!)
+    queryString += ` AND user_id = $${valuesToUpdate.length}`
+
+    await db.query(queryString, valuesToUpdate)
   }
 }
