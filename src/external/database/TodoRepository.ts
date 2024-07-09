@@ -1,6 +1,8 @@
-import ITodo from "@/core/todo/models/ITodo";
-import ITodoRepository from "@/core/todo/services/ITodoRepository";
+import ITodo from "@/core/todo/models/ITodo"
+import ITodoRepository from "@/core/todo/services/ITodoRepository"
 import db from "./db"
+import { IDeleteTodoData } from "@/core/todo/services/DeleteTodo"
+import errors from "../../core/shared/errors"
 
 export default class TodoRepository implements ITodoRepository {
   async create(todo: ITodo): Promise<void> {
@@ -53,10 +55,14 @@ export default class TodoRepository implements ITodoRepository {
     await db.query(queryString, valuesToUpdate)
   }
 
-  async delete(id: string): Promise<void> {
-    await db.query(
-      "DELETE * FROM todos WHERE id = $1",
-      [id]
+  async delete({ id, userId }: IDeleteTodoData): Promise<void> {
+    const result = await db.query(
+      "DELETE FROM todos WHERE id = $1 AND user_id = $2",
+      [id!, userId!]
     )
+
+    if (result?.rowCount === 0) {
+      throw new Error(errors.ACCESS_DENIED)
+    }
   }
 }

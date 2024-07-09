@@ -14,6 +14,8 @@ import ReadTodosByUserId from "./core/todo/services/ReadTodosByUserId"
 import ReadTodosByUserIdController from "./external/api/controllers/ReadTodosByUserIdController"
 import UpdateTodo from "./core/todo/services/UpdateTodo"
 import UpdateTodoController from "./external/api/controllers/UpdateTodoController"
+import DeleteTodo from "./core/todo/services/DeleteTodo"
+import DeleteTodoController from "./external/api/controllers/DeleteTodoController"
 
 dotenv.config({ path: ".env.development" })
 
@@ -38,9 +40,11 @@ const loginUserUseCase = new LoginUser(userRepository, cryptographyService)
 const createTodoUseCase = new CreateTodo(todoRepository)
 const readTodosByUserIdUseCase = new ReadTodosByUserId(todoRepository)
 const updateTodoUseCase = new UpdateTodo(todoRepository)
+const deleteTodoUseCase = new DeleteTodo(todoRepository)
 
 new RegisterUserController(app, registerUserUseCase)
 new LoginUserController(app, loginUserUseCase)
 new CreateTodoController(app, createTodoUseCase, auth)
 new ReadTodosByUserIdController(app, readTodosByUserIdUseCase, auth)
 new UpdateTodoController(app, updateTodoUseCase, auth)
+new DeleteTodoController(app, deleteTodoUseCase, auth)
