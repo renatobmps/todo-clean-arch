@@ -12,7 +12,7 @@ export default class ReadTodosByUserId implements IUseCase<string, ITodo[]> {
       return await this.todoRepository.readTodosByUserId(userId)
 
     } catch (error: any) {
-      console.error(`Error during reading to-dos for user ${userId}: `, error)
+      // console.error(`Error during reading to-dos for user ${userId}: `, error)
       throw new Error(error.message)
     }
   }

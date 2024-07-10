@@ -42,7 +42,7 @@ export default class RegisterUser implements IUseCase<IUser, void> {
       await this.usersRepository.create(newUser)
 
     } catch (error: any) {
-      console.error("Error during user registration: ", error)
+      // console.error("Error during user registration: ", error)
       throw new Error(error.message)
     }
   }

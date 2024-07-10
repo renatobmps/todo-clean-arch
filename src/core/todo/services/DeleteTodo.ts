@@ -16,7 +16,7 @@ export default class DeleteTodo implements IUseCase<IDeleteTodoData, void> {
       await this.todoRepository.delete(todo)
 
     } catch (error: any) {
-      console.error(`Error on delete to-do. todo id: ${todo.id}: `, error)
+      // console.error(`Error on delete to-do. todo id: ${todo.id}: `, error)
       throw new Error(error.message)
     }
   }

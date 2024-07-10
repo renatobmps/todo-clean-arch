@@ -27,7 +27,7 @@ export default class CreateTodo implements IUseCase<ITodo, void> {
       await this.todoRepository.create(newTodo)
 
     } catch (error: any) {
-      console.error("Error during to-do creation", error)
+      // console.error("Error during to-do creation", error)
       throw new Error(error.message)
     }
   }
