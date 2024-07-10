@@ -24,10 +24,10 @@ describe("Test RegisterUser.ts use case", () => {
   })
 
   it("Should successfully register a new user", async () => {
-    const newUser: IUser = { name: "John Doe", email: "john@email.com", password: "password123" }
+    const newUser: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
 
     mockUserRepository.readByEmail.mockResolvedValue(null)
-    mockCrypgraphyService.encrypt.mockReturnValue("encryptedPassword")
+    mockCrypgraphyService.encrypt.mockResolvedValue("encryptedP4ssW0rd@123")
 
     await registerUser.execute(newUser)
 
@@ -36,12 +36,12 @@ describe("Test RegisterUser.ts use case", () => {
     expect(mockUserRepository.create).toHaveBeenCalledWith({
       name: newUser.name,
       email: newUser.email,
-      password: "encryptedPassword"
+      password: "encryptedP4ssW0rd@123"
     })
   })
 
   it("Should throw an error if user already exists", async () => {
-    const user: IUser = { name: "John Doe", email: "john@email.com", password: "password123" }
+    const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
 
     mockUserRepository.readByEmail.mockResolvedValue(user)
 
