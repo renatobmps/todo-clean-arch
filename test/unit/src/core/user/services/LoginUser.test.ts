@@ -28,7 +28,7 @@ describe("Test LoginUser.ts use case", () => {
 
     const userDataProvided: InputUserData = {
       email: "john@email.com",
-      password: "password123"
+      password: "P4ssW0rd@123"
     }
 
     await expect(loginUser.execute(userDataProvided)).rejects.toThrow(errors.USER_DONT_EXISTS)
@@ -39,7 +39,7 @@ describe("Test LoginUser.ts use case", () => {
       id: "1",
       name: "John Doe",
       email: "john@email.com",
-      password: "encryptedPassword"
+      password: "encryptedP4ssW0rd@123"
     }
 
     const userDataProvided: InputUserData = {
@@ -48,7 +48,7 @@ describe("Test LoginUser.ts use case", () => {
     }
 
     mockUserRepository.readByEmail.mockResolvedValue(dbUser)
-    mockCryptographyService.compare.mockReturnValue(false)
+    mockCryptographyService.compare.mockResolvedValue(false)
 
     await expect(loginUser.execute(userDataProvided)).rejects.toThrow(errors.INVALID_CREDENTIALS)
   })
@@ -58,16 +58,16 @@ describe("Test LoginUser.ts use case", () => {
       id: "1",
       name: "John Doe",
       email: "john@email.com",
-      password: "encryptedPassword"
+      password: "encryptedP4ssW0rd@123"
     }
 
     const userDataProvided: InputUserData = {
       email: "john@email.com",
-      password: "password123"
+      password: "P4ssW0rd@123"
     }
 
     mockUserRepository.readByEmail.mockResolvedValue(dbUser)
-    mockCryptographyService.compare.mockReturnValue(true)
+    mockCryptographyService.compare.mockResolvedValue(true)
 
     const result = await loginUser.execute(userDataProvided)
 
