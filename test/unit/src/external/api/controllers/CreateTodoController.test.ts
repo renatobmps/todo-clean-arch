@@ -12,12 +12,6 @@ const mockAuthMiddleware = (req: ReqWithUser, res: Response, next: NextFunction)
   next();
 };
 
-const mockAuthMiddleware2 = (req: ReqWithUser, res: Response, next: NextFunction) => {
-  // req.user = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
-  next();
-};
-
-
 describe("Test CreateTodoController.ts", () => {
   let app: Express
   let createTodo: CreateTodo
