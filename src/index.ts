@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-import express from "express"
+import express, { Request, Response } from "express"
 import RegisterUserController from "./external/api/controllers/RegisterUserController"
 import RegisterUser from "./core/user/services/RegisterUser"
 import UserRepository from "./external/database/UserRepository"
@@ -25,6 +25,8 @@ const PORT = process.env.API_PORT ?? 4000
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.get("/", (req: Request, res: Response) => res.status(200).send())
+
 app.listen(PORT, () => {
   console.info(`Server running on port ${PORT}`)
 })
@@ -48,3 +50,5 @@ new CreateTodoController(app, createTodoUseCase, auth)
 new ReadTodosByUserIdController(app, readTodosByUserIdUseCase, auth)
 new UpdateTodoController(app, updateTodoUseCase, auth)
 new DeleteTodoController(app, deleteTodoUseCase, auth)
+
+export default app
