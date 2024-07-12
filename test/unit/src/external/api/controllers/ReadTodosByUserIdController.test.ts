@@ -55,4 +55,3 @@ describe("Test ReadTodosByUserId.ts", () => {
     expect(response.status).toBe(200)
   })
 })
-
