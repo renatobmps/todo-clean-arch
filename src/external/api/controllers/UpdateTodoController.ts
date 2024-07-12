@@ -3,7 +3,6 @@ import UpdateTodo from "@/core/todo/services/UpdateTodo";
 import errors from "../../../core/shared/errors";
 import { ReqWithUser } from "../middlewares/authMiddleware";
 
-
 export default class UpdateTodoController {
   constructor(
     webServer: Express,
@@ -13,6 +12,10 @@ export default class UpdateTodoController {
 
     webServer.patch("/api/todos/:id", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
+
+        if (!req.user) {
+          return res.status(403).send(errors.ACCESS_DENIED)
+        }
 
         const updatedTodo = {
           id: req.params.id,
