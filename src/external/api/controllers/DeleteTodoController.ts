@@ -12,6 +12,11 @@ export default class DeleteTodoController {
 
     webServer.delete("/api/todos/:id", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
+
+        if (!req.user) {
+          return res.status(403).send(errors.ACCESS_DENIED)
+        }
+
         await useCase.execute({
           id: req.params.id,
           userId: req.user?.id
@@ -20,11 +25,13 @@ export default class DeleteTodoController {
         res.status(200).send()
 
       } catch (error: any) {
-        if (error.message === errors.ACCESS_DENIED) {
-          res.status(403).send(error.message)
-        } else {
-          res.status(500).send(errors.UNEXPECTED_ERROR)
-        }
+        // if (error.message === errors.ACCESS_DENIED) {
+        //   res.status(403).send(error.message)
+        // } else {
+        //   res.status(500).send(errors.UNEXPECTED_ERROR)
+        // }
+
+        res.status(500).send(errors.UNEXPECTED_ERROR)
       }
     })
   }
