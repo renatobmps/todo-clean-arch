@@ -33,10 +33,6 @@ describe("Test LoginUserController.ts", () => {
 
     loginUser = new LoginUser(mockUserRepository, mockCryptographyService)
 
-    process.env.JWT_SECRET = "testsecret"
-    const jwtServiceInstance = new JwtService(process.env.JWT_SECRET!);
-    jest.spyOn(jwtServiceInstance, 'sign').mockReturnValue("authenticationToken");
-
     new LoginUserController(app, loginUser)
 
     jest.spyOn(loginUser, "execute")
@@ -44,32 +40,29 @@ describe("Test LoginUserController.ts", () => {
 
   })
 
-  // it("Should log in an existing user", async () => {
-  //   (loginUser.execute as jest.Mock).mockResolvedValue({ id: "1", name: "John Doe", email: "john@email.com", password: undefined })
+  it("Should log in an existing user", async () => {
+    (loginUser.execute as jest.Mock).mockResolvedValue({ id: "1", name: "John Doe", email: "john@email.com", password: undefined })
 
-  //   const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "encryptedP4ssW0rd@123" }
+    const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "encryptedP4ssW0rd@123" }
 
-  //   mockUserRepository.readByEmail.mockResolvedValue(user)
-  //   mockCryptographyService.compare.mockResolvedValue(true)
+    mockUserRepository.readByEmail.mockResolvedValue(user)
+    mockCryptographyService.compare.mockResolvedValue(true)
 
-  //   const response = await request(app)
-  //     .post("/api/users/login")
-  //     .send({ email: "john@email.com", password: "P4ssW0rd@123" })
+    const response = await request(app)
+      .post("/api/users/login")
+      .send({ email: "john@email.com", password: "P4ssW0rd@123" })
 
-  //   console.log(response.body);
+    expect(response.status).toBe(200)
 
+    expect(response.body).toEqual({
+      user: { id: "1", name: "John Doe", email: "john@email.com" }
+    })
 
-  //   expect(response.status).toBe(200)
-  //   expect(response.body).toEqual({
-  //     user: { id: "1", name: "John Doe", email: "john@email.com", password: undefined },
-  //     token: "authenticationToken"
-  //   })
-
-  //   expect(loginUser.execute).toHaveBeenCalledWith({
-  //     email: "john@email.com",
-  //     password: "P4ssW0rd@123"
-  //   })
-  // })
+    expect(loginUser.execute).toHaveBeenCalledWith({
+      email: "john@email.com",
+      password: "P4ssW0rd@123"
+    })
+  })
 
   it("Should return 400 when the credentials are incorrect", async () => {
     const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "wrongPassword" }
