@@ -5,5 +5,5 @@ export default interface ITodoRepository {
   create(data: ITodo): Promise<void>
   readTodosByUserId(userId: string): Promise<ITodo[]>
   update(todo: ITodo): Promise<void>
-  delete(todo: IDeleteTodoData): Promise<void>
+  delete(todo: IDeleteTodoData): Promise<number>
 }

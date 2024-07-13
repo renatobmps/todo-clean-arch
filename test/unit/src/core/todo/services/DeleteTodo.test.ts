@@ -34,4 +34,3 @@ describe("Test DeleteTodo.ts", () => {
     await expect(deleteTodoUseCaseMock.execute(todoDataToDelete)).rejects.toThrow(errors.ACCESS_DENIED)
   })
 })
-
