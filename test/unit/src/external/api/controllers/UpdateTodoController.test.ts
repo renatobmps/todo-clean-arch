@@ -1,4 +1,4 @@
-import errors from "@/core/shared/errors"
+import ITodo from "@/core/todo/models/ITodo"
 import ITodoRepository from "@/core/todo/services/ITodoRepository"
 import UpdateTodo from "@/core/todo/services/UpdateTodo"
 import IUser from "@/core/user/models/IUser"
@@ -12,10 +12,10 @@ describe("Test UpdateTodoContoller.ts", () => {
   let mockTodoRepository: jest.Mocked<ITodoRepository>
   let updateTodoUseCaseMock: UpdateTodo
 
-  function mockAuthMiddleware(haveUser: boolean) {
+  function authMiddlewareMock(isValidUser: boolean) {
     return (req: ReqWithUser, res: Response, next: NextFunction,) => {
-      const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
-      haveUser === true ? req.user = user : req.user = undefined
+      const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
+      isValidUser ? req.user = user : req.user = undefined
       next()
     }
   }
@@ -33,25 +33,42 @@ describe("Test UpdateTodoContoller.ts", () => {
     }
 
     updateTodoUseCaseMock = new UpdateTodo(mockTodoRepository)
+
+    jest.spyOn(updateTodoUseCaseMock, "execute")
   })
 
   it("shold return 403 when user is not authenticated", async () => {
-    new UpdateTodoController(app, updateTodoUseCaseMock, mockAuthMiddleware(false))
+    (updateTodoUseCaseMock.execute as jest.Mock).mockRejectedValue(new Error("You do not have permission to access this resource"))
+
+    new UpdateTodoController(app, updateTodoUseCaseMock, authMiddlewareMock(false))
 
     const response = await request(app)
       .patch("/api/todos/1")
 
     expect(response.status).toBe(403)
-    expect(response.text).toBe(errors.ACCESS_DENIED)
+    expect(response.text).toBe("You do not have permission to access this resource")
+    expect(updateTodoUseCaseMock.execute).not.toHaveBeenCalled()
   })
 
   it("Shold return 200 when to-do is updated successfully", async () => {
-    new UpdateTodoController(app, updateTodoUseCaseMock, mockAuthMiddleware(true))
+    (updateTodoUseCaseMock.execute as jest.Mock).mockResolvedValue(null)
+
+    new UpdateTodoController(app, updateTodoUseCaseMock, authMiddlewareMock(true))
+
+    const updatedTodo: ITodo = {
+      id: "1",
+      userId: "1",
+      title: "Updated todo title",
+      description: "Updated todo description",
+      completed: "true"
+    }
 
     const response = await request(app)
       .patch("/api/todos/1")
       .set("Authorization", "Bearer authentication-token")
+      .send(updatedTodo)
 
     expect(response.status).toBe(200)
+    expect(updateTodoUseCaseMock.execute).toHaveBeenCalledWith(updatedTodo)
   })
 })

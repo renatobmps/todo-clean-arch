@@ -5,7 +5,6 @@ import IUser from "@/core/user/models/IUser"
 import ITodoRepository from "@/core/todo/services/ITodoRepository"
 import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId"
 import request from "supertest"
-import ITodo from "@/core/todo/models/ITodo"
 
 describe("Test ReadTodosByUserId.ts", () => {
   let app: Express
