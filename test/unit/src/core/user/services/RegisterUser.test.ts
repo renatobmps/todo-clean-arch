@@ -23,6 +23,16 @@ describe("Test RegisterUser.ts use case", () => {
     registerUser = new RegisterUser(mockUserRepository, mockCrypgraphyService)
   })
 
+  it("Should throw an error if user already exists", async () => {
+    const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
+
+    mockUserRepository.readByEmail.mockResolvedValue(user)
+
+    await expect(registerUser.execute(user)).rejects.toThrow(errors.USER_EXISTS)
+    expect(mockCrypgraphyService.encrypt).not.toHaveBeenCalled()
+    expect(mockUserRepository.create).not.toHaveBeenCalled()
+  })
+
   it("Should successfully register a new user", async () => {
     const newUser: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
 
@@ -38,15 +48,5 @@ describe("Test RegisterUser.ts use case", () => {
       email: newUser.email,
       password: "encryptedP4ssW0rd@123"
     })
-  })
-
-  it("Should throw an error if user already exists", async () => {
-    const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
-
-    mockUserRepository.readByEmail.mockResolvedValue(user)
-
-    await expect(registerUser.execute(user)).rejects.toThrow(errors.USER_EXISTS)
-    expect(mockCrypgraphyService.encrypt).not.toHaveBeenCalled()
-    expect(mockUserRepository.create).not.toHaveBeenCalled()
   })
 })

@@ -15,17 +15,14 @@ describe("Test UpdateTodo.ts", () => {
     }
 
     updateTodoUseCaseMock = new UpdateTodo(todoRepositoryMock)
-
-    jest.spyOn(updateTodoUseCaseMock, "execute")
   })
 
 
-  it("Shold update to-do", async () => {
+  it("Shold update to-do successfully", async () => {
     const updatedTodo: ITodo = { title: "Test Title", description: "Test description" }
 
     await updateTodoUseCaseMock.execute(updatedTodo)
 
-    expect(updateTodoUseCaseMock.execute).toHaveBeenCalledWith(updatedTodo)
     expect(todoRepositoryMock.update).toHaveBeenCalledWith(updatedTodo)
   })
 })
