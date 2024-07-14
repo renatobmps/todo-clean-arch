@@ -4,18 +4,18 @@ import { ReqWithUser } from "@/external/api/middlewares/authMiddleware"
 import IUser from "@/core/user/models/IUser"
 import ITodoRepository from "@/core/todo/services/ITodoRepository"
 import ReadTodosByUserId from "@/core/todo/services/ReadTodosByUserId"
-import errors from "@/core/shared/errors"
 import request from "supertest"
+import ITodo from "@/core/todo/models/ITodo"
 
 describe("Test ReadTodosByUserId.ts", () => {
   let app: Express
   let readTodosByUserIdUseCaseMock: ReadTodosByUserId
   let todoRepositoryMock: jest.Mocked<ITodoRepository>
 
-  function mockAuthMiddleware(haveUser: boolean) {
+  function authMiddlewareMock(isValidUser: boolean) {
     return (req: ReqWithUser, res: Response, next: NextFunction,) => {
-      const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
-      haveUser === true ? req.user = user : req.user = undefined
+      const user: IUser = { id: "1", name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
+      isValidUser ? req.user = user : req.user = undefined
       next()
     }
   }
@@ -33,25 +33,34 @@ describe("Test ReadTodosByUserId.ts", () => {
     }
 
     readTodosByUserIdUseCaseMock = new ReadTodosByUserId(todoRepositoryMock)
+
+    jest.spyOn(readTodosByUserIdUseCaseMock, "execute")
   })
 
   it("Shold return 403 when user is not authenticated", async () => {
-    new ReadTodosByUserIdController(app, readTodosByUserIdUseCaseMock, mockAuthMiddleware(false))
+    (readTodosByUserIdUseCaseMock.execute as jest.Mock).mockRejectedValue(new Error("You do not have permission to access this resource"))
+
+    new ReadTodosByUserIdController(app, readTodosByUserIdUseCaseMock, authMiddlewareMock(false))
 
     const response = await request(app)
       .get("/api/todos")
 
     expect(response.status).toBe(403)
-    expect(response.text).toBe(errors.ACCESS_DENIED)
+    expect(response.text).toBe("You do not have permission to access this resource")
+    expect(readTodosByUserIdUseCaseMock.execute).not.toHaveBeenCalled()
   })
 
   it("Shold return 200 when the user is authenticated", async () => {
-    new ReadTodosByUserIdController(app, readTodosByUserIdUseCaseMock, mockAuthMiddleware(true))
+    (readTodosByUserIdUseCaseMock.execute as jest.Mock).mockResolvedValue([])
+
+    new ReadTodosByUserIdController(app, readTodosByUserIdUseCaseMock, authMiddlewareMock(true))
 
     const response = await request(app)
       .get("/api/todos")
       .set("Authorization", "Bearer authorization-token")
+      .send()
 
     expect(response.status).toBe(200)
+    expect(readTodosByUserIdUseCaseMock.execute).toHaveBeenCalledWith("1")
   })
 })
