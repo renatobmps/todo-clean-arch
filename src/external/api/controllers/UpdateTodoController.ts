@@ -14,7 +14,7 @@ export default class UpdateTodoController {
       try {
 
         if (!req.user) {
-          return res.status(403).send(errors.ACCESS_DENIED)
+          throw new Error(errors.ACCESS_DENIED)
         }
 
         const updatedTodo = {
@@ -30,8 +30,8 @@ export default class UpdateTodoController {
         res.status(200).send(updatedTodo)
 
       } catch (error: any) {
-        if (error.message) {
-          res.status(400).send(error.message)
+        if (error.message === errors.ACCESS_DENIED) {
+          res.status(403).send(error.message)
         } else {
           res.status(500).send(errors.UNEXPECTED_ERROR)
         }

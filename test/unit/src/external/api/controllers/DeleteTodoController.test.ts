@@ -11,10 +11,10 @@ describe("Test DeleteTodoController.ts", () => {
   let deleteTodoUseCaseMock: DeleteTodo
   let todoRepositoryMock: jest.Mocked<ITodoRepository>
 
-  function mockAuthMiddleware(haveUser: boolean) {
-    return (req: ReqWithUser, res: Response, next: NextFunction) => {
-      const user: IUser = { name: "John Doe", email: "john@email.com", password: "P4ssw0rd@123" }
-      haveUser === true ? req.user = user : req.user = undefined
+  function authMiddlewareMock(isValidUser: boolean) {
+    return (req: ReqWithUser, res: Response, next: NextFunction,) => {
+      const user: IUser = { id: "2", name: "John Doe", email: "john@email.com", password: "P4ssW0rd@123" }
+      isValidUser ? req.user = user : req.user = undefined
       next()
     }
   }
@@ -32,25 +32,34 @@ describe("Test DeleteTodoController.ts", () => {
     }
 
     deleteTodoUseCaseMock = new DeleteTodo(todoRepositoryMock)
+
+    jest.spyOn(deleteTodoUseCaseMock, "execute")
   })
 
   it("Should return 403 when user is not authenticated", async () => {
-    new DeleteTodoController(app, deleteTodoUseCaseMock, mockAuthMiddleware(false))
+    (deleteTodoUseCaseMock.execute as jest.Mock).mockRejectedValue(new Error("You do not have permission to access this resource"))
+
+    new DeleteTodoController(app, deleteTodoUseCaseMock, authMiddlewareMock(false))
 
     const response = await request(app)
       .delete("/api/todos/1")
 
     expect(response.status).toBe(403)
+    expect(response.text).toBe("You do not have permission to access this resource")
+    expect(deleteTodoUseCaseMock.execute).not.toHaveBeenCalled()
   })
 
   it("shold return 200 when an todo is successfully deleted", async () => {
-    new DeleteTodoController(app, deleteTodoUseCaseMock, mockAuthMiddleware(true))
+    (deleteTodoUseCaseMock.execute as jest.Mock).mockResolvedValue(null)
+
+    new DeleteTodoController(app, deleteTodoUseCaseMock, authMiddlewareMock(true))
 
     const response = await request(app)
       .delete("/api/todos/1")
       .set("Authorization", "Bearer Authentication-token")
+      .send({ id: "1", userId: "2" })
 
     expect(response.status).toBe(200)
+    expect(deleteTodoUseCaseMock.execute).toHaveBeenCalledWith({ id: "1", userId: "2" })
   })
 })
-
