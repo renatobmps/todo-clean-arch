@@ -10,8 +10,13 @@ export default class CreateTodoController {
     ...middlewares: RequestHandler[]
   ) {
 
-    webServer.post("/api/todos/create", ...middlewares, async (req: ReqWithUser, res: Response) => {
+    webServer.post("/api/todos", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
+        if (!req.user) {
+          res.status(403).send(errors.ACCESS_DENIED)
+          return
+        }
+
         await useCase.execute({
           userId: req.user!.id,
           title: req.body.title,
