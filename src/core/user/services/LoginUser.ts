@@ -30,7 +30,7 @@ export default class LoginUser implements IUseCase<InputUserData, IUser> {
       return { ...dbUser, password: undefined }
 
     } catch (error: any) {
-      console.error("Error durin user login: ", error)
+      // console.error("Error durin user login: ", error)
       throw new Error(error.message)
     }
   }

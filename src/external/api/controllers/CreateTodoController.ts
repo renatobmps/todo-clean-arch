@@ -10,8 +10,12 @@ export default class CreateTodoController {
     ...middlewares: RequestHandler[]
   ) {
 
-    webServer.post("/api/todos/create", ...middlewares, async (req: ReqWithUser, res: Response) => {
+    webServer.post("/api/todos", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
+        if (!req.user) {
+          throw new Error(errors.ACCESS_DENIED)
+        }
+
         await useCase.execute({
           userId: req.user!.id,
           title: req.body.title,
@@ -21,13 +25,14 @@ export default class CreateTodoController {
         res.status(201).send()
 
       } catch (error: any) {
-        if (
-          error.message === errors.TITLE_REQUIRED ||
-          error.message === errors.DESCRIPTION_REQUIRED
-        ) {
+        if (error.message === errors.ACCESS_DENIED) {
+          res.status(403).send(error.message)
+
+        } else if (error.message === errors.TITLE_REQUIRED || error.message === errors.DESCRIPTION_REQUIRED) {
           res.status(400).send(error.message)
+
         } else {
-          res.status(500).send(errors.UNEXPECTED_ERROR)
+          res.status(500).send(error.message)
         }
       }
     })

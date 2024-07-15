@@ -12,6 +12,11 @@ export default class DeleteTodoController {
 
     webServer.delete("/api/todos/:id", ...middlewares, async (req: ReqWithUser, res: Response) => {
       try {
+
+        if (!req.user) {
+          throw new Error(errors.ACCESS_DENIED)
+        }
+
         await useCase.execute({
           id: req.params.id,
           userId: req.user?.id
