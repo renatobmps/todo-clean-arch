@@ -1,0 +1,17 @@
+.character {
+    cursor: help;
+    padding: 0.3rem 1rem;
+    width: fit-content;
+}
+
+.character span:nth-child(2) {
+    display: none;
+}
+
+.character:hover span:nth-child(1) {
+    display: none;
+}
+
+.character:hover span:nth-child(2) {
+    display: initial;
+}
